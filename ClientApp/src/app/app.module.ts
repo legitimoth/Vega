@@ -1,3 +1,4 @@
+import { PaginationComponent } from './components/shared/pagination.component';
 import { AppErrorHandler } from './app.error-handler';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
@@ -13,13 +14,19 @@ import { ToastrModule } from 'ngx-toastr';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
 
 import { vehicleService } from './services/vehicle.service';
+import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavMenuComponent,
         HomeComponent,
-        VehicleFormComponent
+        VehicleFormComponent,
+        VehicleListComponent,
+        PaginationComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -31,10 +38,12 @@ import { vehicleService } from './services/vehicle.service';
             progressBar: true,
             closeButton: true
         }),
+        FontAwesomeModule,
         RouterModule.forRoot([
-            { path: '', component: HomeComponent, pathMatch: 'full' },
+            { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
             { path: 'vehicles/new', component: VehicleFormComponent },
             { path: 'vehicles/:id', component: VehicleFormComponent },
+            { path: 'vehicles', component: VehicleListComponent },
         ])
     ],
     providers: [
@@ -46,4 +55,8 @@ import { vehicleService } from './services/vehicle.service';
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+    constructor(library: FaIconLibrary){
+        library.addIconPacks(fas);
+    }
+}

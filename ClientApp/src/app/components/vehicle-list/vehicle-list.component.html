@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <h1>Vehicle</h1>
+        </div>
+        <div class="col-6 text-right">
+            <button type="button" class="btn btn-primary" [routerLink]="['/vehicles/new']">New Vehicle</button>
+        </div>
+    </div>
+    <div class="card card-body bg-light">
+        <div class="form-group">
+            <label for="">Make</label>
+            <select name="make" id="make" class="form-control" [(ngModel)]="query.makeId" (change)="onFilterChange()">
+                <option value=""></option>
+                <option *ngFor="let m of makes" value="{{ m.id }}">{{ m.name }}</option>
+            </select>
+
+        </div>
+        <div class="text-right">
+            <button class="btn btn-secondary" (click)="resetFilter()">Reset</button>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th *ngFor="let c of columns">
+                    <div *ngIf="c.isSortable" (click)="sortBy(c.key)" style="cursor: pointer;">
+                        {{ c.title }}
+                        <fa-icon *ngIf="query.sortBy === c.key" icon="{{ query.isSortAscending ? 'sort-up' : 'sort-down' }}"></fa-icon>
+                    </div>
+                    <div *ngIf="!c.isSortable">
+                        {{ c.title }}
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let v of queryResult.items">
+                <td>{{ v.id }}</td>
+                <td>{{ v.make.name }}</td>
+                <td>{{ v.model.name }}</td>
+                <td>{{ v.contact.name}}</td>
+                <td>
+                    <a class="nav-link text-dark" [routerLink]="['/vehicles', v.id]">
+                        <fa-icon icon="edit"></fa-icon>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChange($event)"></pagination>
+</div>

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using vega.Controllers.Resources;
 using vega.Core.Models;
 using vega.Core;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace vega.Controllers
 {
@@ -96,6 +98,16 @@ namespace vega.Controllers
             var vehicleFeature = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
             return Ok(vehicleFeature);
+        }
+
+        [HttpGet]
+        public async Task<QueryResultResource<VehicleResource>> getVehicles(VehicleQueryResource queryResource)
+        {
+            var filter = mapper.Map<VehicleQueryResource, VehicleQuery>(queryResource);
+
+            var queryResult = await repository.getVehicles(filter);
+
+            return mapper.Map<QueryResult<Vehicle>, QueryResultResource<VehicleResource>>(queryResult);
         }
     }
 }
