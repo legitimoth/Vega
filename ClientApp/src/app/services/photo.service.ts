@@ -3,43 +3,57 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class PhotoService {
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    upload2(vehicleId, photo) {
+  upload2(vehicleId, photo) {
 
-        var formData = new FormData();
-        formData.append('file', photo);
+    var formData = new FormData();
+    formData.append('file', photo);
 
-        return this.http.post(`/api/vehicles/${vehicleId}/photos`, formData, { "reportProgress": true })
-            .pipe(map(res => res));
+    return this.http.post(`/api/vehicles/${vehicleId}/photos`, formData, { "reportProgress": true })
+      .pipe(map(res => res));
+  }
+
+  getPhotos(vehicleId) {
+    return this.http.get(`/api/vehicles/${vehicleId}/photos`)
+      .pipe(map(res => res));
+  }
+
+  upload(vehicleId, photo) {
+
+    var formData = new FormData();
+    formData.append('file', photo);
+    return this.http.post(`/api/vehicles/${vehicleId}/photos`, formData, { reportProgress: true, observe: 'events' })
+      .pipe(map(event => this.getReturn(event)));
+  }
+
+  private getReturn(event) {
+    const resultado = {
+      atualiza: true,
+      progresso: 0,
+      objeto: {}
+    };
+    switch (event.type) {
+      case HttpEventType.UploadProgress:
+        resultado.progresso = Math.round(100 * event.loaded / event.total);
+        resultado.objeto = {};
+        resultado.atualiza = true;
+        break;
+      case HttpEventType.Response:
+        resultado.objeto = event.body;
+        resultado.progresso = 100;
+        resultado.atualiza = true;
+        break;
+      default:
+        resultado.atualiza = false;
+        break;
     }
 
-    getPhotos(vehicleId) {
-        return this.http.get(`/api/vehicles/${vehicleId}/photos`)
-            .pipe(map(res => res));
-    }
-
-    upload(vehicleId, photo) {
-
-        var formData = new FormData();
-        formData.append('file', photo);
-        return this.http.post(`/api/vehicles/${vehicleId}/photos`, formData, { reportProgress: true, observe: 'events' })
-            .pipe(map(event => this.getReturn(event)));
-    }
-
-    private getReturn(event) {
-        switch (event.type) {
-            case HttpEventType.UploadProgress:
-                return Math.round(100 * event.loaded / event.total);
-            case HttpEventType.Response:
-                return event.body;
-            default:
-                return null;
-        }
-    }
+    return resultado;
+  }
 
 }
