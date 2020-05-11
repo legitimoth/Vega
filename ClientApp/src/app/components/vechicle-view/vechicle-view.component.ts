@@ -66,11 +66,12 @@ export class VechicleViewComponent implements OnInit {
         this.photoService.upload(this.vehicleId, nativeElement.files[0])
             .subscribe(
               res => {
-                if(res && res.atualiza)
-                    this.updateFileStatus(res.progresso);
+                if (res && res.atualiza) {
+                  this.updateFileStatus(res.progresso);
 
-                if (res.objeto !== null && res.objeto !== {})
+                  if (res.objeto !== null && res.objeto !== {})
                     this.photos.push(res);
+                }
             },
             err => this.toastrService.error(err.error, 'Error'),
             () => {
