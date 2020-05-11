@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using vega.Core;
 using vega.Persistence;
 using AutoMapper;
+using vega.Core.Models;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace Vega
 {
@@ -40,6 +42,11 @@ namespace Vega
             //Interface
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
+
+            //Photo upload config
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

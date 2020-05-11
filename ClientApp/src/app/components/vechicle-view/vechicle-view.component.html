@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Vehicle</h1>
+            <hr>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic" role="tab" aria-controls="basic" aria-selected="true">Vehicle</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="photo-tab" data-toggle="tab" href="#photo" role="tab" aria-controls="photo" aria-selected="false">Photos</a>
+                </li>
+            </ul>
+
+            <div class="tab-content" *ngIf="vehicle">
+                <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                    <h2>Basics</h2>
+                    <ul>
+                        <li>Make: {{ vehicle.make.name }}</li>
+                        <li>Model: {{ vehicle.model.name }}</li>
+                        <li>Registered: {{ vehicle.isRegistered ? 'Yes' : 'No' }}
+                    </ul>
+                    <h2>Features</h2>
+                    <ul>
+                        <li *ngFor="let f of vehicle.features">{{ f.name }}</li>
+                    </ul>
+                    <h2>Contact</h2>
+                    <ul>
+                        <li>Contact Name: {{ vehicle.contact.name }}</li>
+                        <li>Contact Phone: {{ vehicle.contact.phone }}</li>
+                        <li>Contact Email: {{ vehicle.contact.email }}</li>
+                    </ul>
+                    <br />
+                    <p>
+                        <button class="btn btn-primary" [routerLink]="['/vehicles/edit/', vehicle.id]">Edit</button>
+                        <button class="btn btn-danger" (click)="delete()">Delete</button>
+                        <button class="btn btn-secondary" [routerLink]="['/vehicles']">View All Vehicles</button>
+                    </p>
+                </div>
+                <!-- Photos tab -->
+                <div class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
+                    <h2>Photos</h2>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="photo" (change)="uploadPhoto()" #fileInput>
+                        <label class="custom-file-label" for="photo">{{file.name}}</label>
+                    </div>
+                    <div class="progress" style="height: 25px; margin-top: .5rem;" *ngIf="file.progress != null && file.progress < 100">
+                        <div [ngClass]="file.class" class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar" [style.width]="file.progress + '%'" [attr.aria-valuenow]="file.progress" aria-valuemin="0" aria-valuemax="100">{{ file.progress }}% Completed</div>
+                    </div>
+                    <div>
+                        <ul id="photo-list">
+                            <li *ngFor="let photo of photos">
+                                <img src="/uploads/{{ photo.fileName }}" class="img-thumbnail">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

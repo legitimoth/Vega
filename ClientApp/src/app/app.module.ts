@@ -1,3 +1,4 @@
+import { PhotoService } from './services/photo.service';
 import { PaginationComponent } from './components/shared/pagination.component';
 import { AppErrorHandler } from './app.error-handler';
 import { BrowserModule } from '@angular/platform-browser';
@@ -18,6 +19,7 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
 
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { VechicleViewComponent } from './components/vechicle-view/vechicle-view.component';
 
 @NgModule({
     declarations: [
@@ -26,7 +28,8 @@ import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontaweso
         HomeComponent,
         VehicleFormComponent,
         VehicleListComponent,
-        PaginationComponent
+        PaginationComponent,
+        VechicleViewComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -42,7 +45,8 @@ import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontaweso
         RouterModule.forRoot([
             { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
             { path: 'vehicles/new', component: VehicleFormComponent },
-            { path: 'vehicles/:id', component: VehicleFormComponent },
+            { path: 'vehicles/:id', component: VechicleViewComponent },
+            { path: 'vehicles/edit/:id', component: VehicleFormComponent },
             { path: 'vehicles', component: VehicleListComponent },
         ])
     ],
@@ -52,6 +56,7 @@ import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontaweso
             useClass: AppErrorHandler
         },
         vehicleService,
+        PhotoService
     ],
     bootstrap: [AppComponent]
 })

@@ -24,3 +24,7 @@ code {
 body {
     padding-bottom: 1rem;
 }
+
+.btn:nth-child(n+2) {
+    margin-left: .2rem;
+}

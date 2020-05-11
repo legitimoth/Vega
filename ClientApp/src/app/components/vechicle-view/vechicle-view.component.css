@@ -1,0 +1,9 @@
+#photo-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#photo-list li {
+    float: left;
+    padding: 10px 10px 10px 0;
+}
